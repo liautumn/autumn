@@ -1,0 +1,45 @@
+﻿mode:
+  type: Standalone
+  repository:
+    type: JDBC
+
+dataSources:
+  master:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/autumn_cloud?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: zhuang2001
+  slave1:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/autumn_cloud?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: zhuang2001
+  slave2:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/autumn_cloud?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: zhuang2001
+
+rules:
+- !READWRITE_SPLITTING
+  dataSources:
+    readwrite_ds:
+      staticStrategy:
+        # 写
+        writeDataSourceName: master
+        # 读
+        readDataSourceNames:
+          - slave1
+          - slave2
+      loadBalancerName: roundRobin
+  # 策略
+  loadBalancers:
+    roundRobin:
+      type: ROUND_ROBIN # 轮询
+
+props:
+  sql-show: true
+

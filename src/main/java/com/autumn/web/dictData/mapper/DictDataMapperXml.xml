@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.autumn.web.dictData.mapper.DictDataMapper">
+
+    <resultMap id="BaseResultMap" type="com.autumn.web.dictData.entity.DictData">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="VARCHAR"/>
+        <result property="dictTypeId" column="dict_type_id" jdbcType="VARCHAR"/>
+        <result property="dictLabel" column="dict_label" jdbcType="VARCHAR"/>
+        <result property="dictValue" column="dict_value" jdbcType="VARCHAR"/>
+        <result property="dictSort" column="dict_sort" jdbcType="INTEGER"/>
+        <result property="dictType" column="dict_type" jdbcType="VARCHAR"/>
+        <result property="cssClass" column="css_class" jdbcType="VARCHAR"/>
+        <result property="echoClass" column="echo_class" jdbcType="VARCHAR"/>
+        <result property="isDefault" column="is_default" jdbcType="CHAR"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="del_flag" jdbcType="CHAR"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        parent_id,
+        dict_type_id,
+        dict_label,
+        dict_value,
+        dict_sort,
+        dict_type,
+        css_class,
+        echo_class,
+        is_default,
+        status,
+        remark,
+        del_flag,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+    </sql>
+
+
+</mapper>

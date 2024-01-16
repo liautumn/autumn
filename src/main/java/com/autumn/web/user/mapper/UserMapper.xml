@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.autumn.web.user.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.autumn.web.user.entity.User">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="deptId" column="dept_id" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="userType" column="user_type" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="phonenumber" column="phonenumber" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="CHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="loginIp" column="login_ip" jdbcType="VARCHAR"/>
+        <result property="loginDate" column="login_date" jdbcType="TIMESTAMP"/>
+        <result property="delFlag" column="del_flag" jdbcType="CHAR"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        dept_id,
+        user_name,
+        nick_name,
+        user_type,
+        email,
+        phonenumber,
+        sex,
+        avatar,
+        password,
+        remark,
+        status,
+        login_ip,
+        login_date,
+        del_flag,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+    </sql>
+
+    <select id="getInfoById" resultType="java.util.Map">
+        select user.id,
+               dept.dept_name   deptName,
+               user.user_name   userName,
+               user.nick_name   nickName,
+               user.user_type   userType,
+               user.email,
+               user.phonenumber,
+               user.sex,
+               user.avatar,
+               user.status,
+               user.login_ip    loginIp,
+               user.login_date  loginDate,
+               user.create_by   createBy,
+               user.create_time createTime,
+               user.remark
+        from sys_user user
+                 left join sys_dept dept on user.dept_id = dept.id
+        where user.status = '1'
+          and user.del_flag = '1'
+          and dept.status = '1'
+          and dept.del_flag = '1'
+          and user.id = #{id}
+    </select>
+
+
+</mapper>

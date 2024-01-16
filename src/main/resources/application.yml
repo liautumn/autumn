@@ -1,0 +1,126 @@
+server:
+  port: 8080
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: autumn-system
+        
+  # redis 配置
+  redis:
+    # 地址
+    host: 127.0.0.1
+    # 端口，默认为6379
+    port: 6379
+    # 数据库索引
+    database: 1
+    # 密码
+    password: 123456
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池的最大数据库连接数
+        max-active: 8
+        # #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+
+  # 数据库配置
+  datasource:
+    # 读写分离配置
+    #driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    #url: jdbc:shardingsphere:classpath:sharding-read-write.yaml
+    # 非读写分离配置
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/autumn?useSSL=true&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+aj:
+  captcha:
+    cache-type: redis
+    jigsaw: classpath:images/jigsaw
+    pic-click: classpath:images/pic-click
+    # 验证码类型default两种都实例化。
+    type: default
+    # 汉字统一使用Unicode,保证程序通过@value读取到是中文，可通过这个在线转换
+    # https://tool.chinaz.com/tools/unicode.aspx 中文转Unicode
+    # 右下角水印文字(我的水印)
+    water-mark: autumn
+    # 右下角水印字体(宋体)
+    water-font: \u5b8b\u4f53
+    # 点选文字验证码的文字字体(宋体)
+    font-type: \u5b8b\u4f53
+    # 校验滑动拼图允许误差偏移量(默认5像素)
+    slip-offset: 5
+    # aes加密坐标开启或者禁用(true|false)
+    aes-status: true
+    # 滑动干扰项(0/1/2)
+    interference-options: 1
+
+autumn:
+  password:
+    salt: kjsdafhjekhiohni
+
+    #  rabbitmq:
+    #    username: admin
+    #    password: zhuang2001
+    #    virtual-host: /
+    #    # 单服务使用
+    #    host: 127.0.0.1
+    #    port: 5672
+    # 集群使用
+    # addresses: 127.0.0.1:5672
+
+pagehelper:
+  helper-dialect: mysql
+
+# SpringBoot的日志级别默认为info,大于full,导致feign的日志配置不会输出，所以加以下配置
+logging:
+  level:
+    com.dt.springcloud.openfeign: debug
+
+minio:
+  #Minio服务所在地址
+  endpoint: http://127.0.0.1:9000
+  #访问的key
+  accessKey: zhuang2001
+  #访问的秘钥
+  secretKey: zhuang2001
+  #存储桶名称
+  bucketName: files
+
+#mybatis-plus配置
+mybatis-plus:
+  type-aliases-package: com.*.*.*.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 开启驼峰命名
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-field: delFlag
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+
+# Sa-Token配置
+sa-token:
+  # token名称 (同时也是cookie名称)
+  token-name: autumn-token
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: false
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: false
+  # token风格
+  token-style: random-64
+  # 是否输出操作日志
+  is-log: false
+

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.autumn.web.role.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.autumn.web.role.entity.Role">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
+        <result property="roleSort" column="role_sort" jdbcType="INTEGER"/>
+        <result property="dataScope" column="data_scope" jdbcType="CHAR"/>
+        <result property="menuCheckStrictly" column="menu_check_strictly" jdbcType="CHAR"/>
+        <result property="deptCheckStrictly" column="dept_check_strictly" jdbcType="CHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="delFlag" column="del_flag" jdbcType="CHAR"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        role_name,
+        role_key,
+        role_sort,
+        data_scope,
+        menu_check_strictly,
+        dept_check_strictly,
+        remark,
+        status,
+        del_flag,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+    </sql>
+
+    <sql id="Role_User_Column_List">
+        role.id,
+        role_name,
+        role_key,
+        role_sort,
+        data_scope,
+        menu_check_strictly,
+        dept_check_strictly,
+        remark,
+        status
+    </sql>
+
+    <select id="getRoleKeysByLoginId" resultType="com.autumn.web.role.entity.Role">
+        select
+        <include refid="Role_User_Column_List"></include>
+        from sys_role role inner join sys_user_role urole
+        on role.id = urole.role_id where role.del_flag = '1' and urole.del_flag = '1'
+        and role.status = '1' and urole.user_id = #{loginId}
+    </select>
+
+
+</mapper>

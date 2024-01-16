@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.autumn.web.menu.mapper.MenuMapper">
+
+    <resultMap id="BaseResultMap" type="com.autumn.web.menu.entity.Menu">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="VARCHAR"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="redirect" column="redirect" jdbcType="VARCHAR"/>
+        <result property="component" column="component" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="activeMenu" column="active_menu" jdbcType="VARCHAR"/>
+        <result property="isLink" column="is_link" jdbcType="CHAR"/>
+        <result property="isHide" column="is_hide" jdbcType="CHAR"/>
+        <result property="isFull" column="is_full" jdbcType="CHAR"/>
+        <result property="isAffix" column="is_affix" jdbcType="CHAR"/>
+        <result property="isKeepAlive" column="is_keep_alive" jdbcType="CHAR"/>
+        <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
+        <result property="menuType" column="menu_type" jdbcType="CHAR"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="perms" column="perms" jdbcType="VARCHAR"/>
+        <result property="query" column="query" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="delFlag" column="del_flag" jdbcType="CHAR"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,parent_id,path,
+        name,redirect,component,
+        icon,title,active_menu,is_link,
+        is_hide,is_full,is_affix,
+        is_keep_alive,order_num,menu_type,
+        status,perms,query,
+        remark,del_flag,create_by,
+        create_time,update_by,update_time
+    </sql>
+
+    <sql id="getMenuList_Column_List">
+        menu.id,menu.parent_id,menu.path,
+        menu.name,menu.redirect,menu.component,
+        menu.icon,menu.title,menu.active_menu,menu.is_link,
+        menu.is_hide,menu.is_full,menu.is_affix,
+        menu.is_keep_alive,menu.order_num,menu.menu_type,
+        menu.status,menu.perms,menu.query,
+        menu.remark,menu.del_flag,menu.create_by,
+        menu.create_time,menu.update_by,menu.update_time
+    </sql>
+
+    <select id="getMenuList" resultMap="BaseResultMap">
+        select
+        <include refid="getMenuList_Column_List"/>
+        from sys_menu menu
+        inner join
+        sys_role_menu rmenu
+        inner join
+        sys_user_role urole
+        on menu.id = rmenu.menu_id
+        and urole.role_id = rmenu.role_id
+        where menu.status = '1'
+        and menu.del_flag = '1'
+        and rmenu.del_flag = '1'
+        and urole.del_flag = '1'
+        and (menu.menu_type = '0' or menu.menu_type = '1')
+        and urole.user_id = #{loginId}
+        order by menu.order_num asc
+    </select>
+
+    <select id="getBtnPermsList" resultType="com.autumn.web.menu.entity.Menu">
+        select menu.perms perms
+        from sys_menu menu
+                 inner join
+             sys_role_menu rmenu
+                 inner join
+             sys_user_role urole
+             on menu.id = rmenu.menu_id and menu.status = '0'
+                 and urole.role_id = rmenu.role_id
+        where menu.menu_type = 'F'
+          and urole.user_id = #{loginId}
+    </select>
+
+    <select id="getMenuBtnsByUserid" resultType="com.autumn.web.menu.entity.Menu">
+        select menu.id,
+        menu.parent_id parentId,
+        menu.menu_type menuType,
+        menu.name,
+        menu.perms
+        from sys_menu menu
+        inner join
+        sys_role_menu rmenu
+        inner join
+        sys_user_role urole
+        on menu.id = rmenu.menu_id
+        and urole.role_id = rmenu.role_id
+        where menu.status = '1'
+        and menu.del_flag = '1'
+        and rmenu.del_flag = '1'
+        and urole.del_flag = '1'
+        and menu.menu_type = #{menuType}
+        and urole.user_id = #{loginId}
+        <if test="parentId != null and parentId != ''">
+            and menu.parent_id = #{parentId}
+        </if>
+        order by menu.order_num asc
+    </select>
+
+</mapper>
